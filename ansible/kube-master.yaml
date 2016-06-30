@@ -9,6 +9,11 @@
     when: hostvars[item].ansible_host is defined
     with_items: "{{ groups['all'] }}"
 
+  - name: Enable RHEL7-Extras repo
+    command: subscription-manager repos --enable=rhel-7-server-extras-rpms
+    when: ansible_distribution == 'RedHat' and ansible_distribution_major_version == '7'
+    ignore_errors: yes
+
   - name: Configure EPEL release
     yum: name=epel-release state=latest
     register: result
